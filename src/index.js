@@ -5,6 +5,7 @@ import {
   StatusBar,
   FlatList,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
 import api from './services/api';
@@ -18,6 +19,15 @@ const App = () => {
     });
   }, []);
 
+  async function handleAddProject() {
+    const response = await api.post('/projects', {
+      title: 'Novo Projeto',
+      owner: 'Marcio Rodrigues',
+    });
+
+    setProjects([...projects, response.data]);
+  }
+
   return (
     <Fragment>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -30,6 +40,13 @@ const App = () => {
             <Text style={styles.project}>{item.title}</Text>
           )}
         />
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.button}
+          onPress={handleAddProject}>
+          <Text style={styles.buttonText}>Add projeto</Text>
+        </TouchableOpacity>
       </SafeAreaView>
 
       {/* <View style={styles.container}>
@@ -53,5 +70,17 @@ const styles = StyleSheet.create({
   project: {
     color: '#fff',
     fontSize: 20,
+  },
+  button: {
+    backgroundColor: '#fff',
+    margin: 20,
+    height: 50,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
